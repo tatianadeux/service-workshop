@@ -6,14 +6,19 @@ import { Article } from './article';
   providedIn: 'root'
 })
 export class ArticleService {
-
-  article: Article = new Article();
   articles: Article[] = [];
+  articlesDeleted: Article[] = [];
 
-  constructor() { }
+  constructor() {
+    this.articles = this.getFromLocalStorage()
+  }
 
+  /**
+   * Ajout d'un article
+   * @param article Article à supprimer
+   */
   createArticle(article: Article): void{
-    this.articles.push(this.article);
+    this.articles.push(article);
   }
 
   /**
@@ -23,8 +28,10 @@ export class ArticleService {
   deleteArticle(article: Article){
     // Récupération de l'index de l'article à supprimer
     const index = this.articles.findIndex( x => x.id === article.id);
-    // Suppréssion de l'article du tableau
+    // Supprssion de l'article du tableau
     this.articles.splice(index, 1);
+    // ajouter l'article supprimé au tableau des articles supprimés
+    this.articlesDeleted.push(article);
   }
    /**
    * Récupération du tableau d'articles stocké dans le local storage
@@ -36,6 +43,16 @@ export class ArticleService {
       const articles: Article[] = JSON.parse(stringData);
 
       return articles;
+    }
+
+    restoreArticle(article: Article){
+      /* supprimer du tableau deleted pour rajouter dans le tableau normal */
+       // Récupération de l'index de l'article à supprimer
+    const index = this.articlesDeleted.findIndex( x => x.id === article.id);
+    // Supprssion de l'article du tableau
+    this.articlesDeleted.splice(index, 1);
+    // ajouter l'article supprimé au tableau des articles supprimés
+    this.articles.push(article);
     }
 }
 

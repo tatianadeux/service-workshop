@@ -28,6 +28,8 @@ export class ArticlesListComponent implements OnInit {
   }
 
   suppressArticle(article: Article){
-    this.articleService.deleteArticle(this.article);
+    this.articleService.deleteArticle(article);
+    console.log(this.articleService.deleteArticle(article))
+
   }
 }
